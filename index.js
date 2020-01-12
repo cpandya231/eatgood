@@ -3,22 +3,17 @@ require('./model/db');
 const express = require("express");
 const Joi = require('joi');
 const app = express();
-const restaurantController=require("./controller/restaurantController")
+const restaurantController = require("./controller/restaurantController")
 //To parse json request
 app.use(express.json());
 var restaurants = [
-    { id: 1, name: "Namma kitchen" },
-    { id: 2, name: "Hyderabad House" },
-    { id: 3, name: "Apache High Street" },
-    { id: 4, name: "Namma kitchen" },
-
 ]
 // default route
 app.get("/", (req, res) => {
     res.send("Get request works")
 })
 
-app.use("/api/restaurants",restaurantController);
+app.use("/api/restaurants", restaurantController);
 
 
 //Find by query paran
@@ -38,7 +33,7 @@ app.post("/api/restaurants", (req, res) => {
 
     var { error } = validateRestaurant(req.body);
     if (error) return res.status(400).send(error.details[0].message);
-        
+
     var restaurant = {
         id: restaurants.length + 1,
         name: req.body.name
