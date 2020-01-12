@@ -1,7 +1,9 @@
+require('./model/db');
+
 const express = require("express");
 const Joi = require('joi');
 const app = express();
-
+const restaurantController=require("./controller/restaurantController")
 //To parse json request
 app.use(express.json());
 var restaurants = [
@@ -16,10 +18,8 @@ app.get("/", (req, res) => {
     res.send("Get request works")
 })
 
-//specific route
-app.get("/api/restaurants", (req, res) => {
-    res.send(restaurants)
-})
+app.use("/api/restaurants",restaurantController);
+
 
 //Find by query paran
 app.get("/api/restaurants/:id", (req, res) => {
