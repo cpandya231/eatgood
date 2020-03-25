@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "express-poc-executor",
+    "name": "express-poc",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "twp3bg9fbk"
+  }
+}
