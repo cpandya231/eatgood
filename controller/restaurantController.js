@@ -5,9 +5,10 @@ const scanDDB = require('../model/scanItemDDB');
 var router = express.Router();
 
 router.get("/", (req, res) => {
-    let city = req.query.city;
+
+    let queryParams = req.query;
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -18,7 +19,7 @@ router.get("/", (req, res) => {
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
-    scanDDB.getRestaurant((err, data) => {
+    scanDDB.getRestaurant(queryParams, (err, data) => {
         if (err) {
             res.json(err);
         } else {
@@ -27,6 +28,8 @@ router.get("/", (req, res) => {
     });
 
 })
+
+
 
 
 module.exports = router;
