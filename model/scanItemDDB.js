@@ -10,36 +10,52 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 
 console.log("Querying for restaurants");
 
-var params = {
-    TableName: "restaurant",
-    KeyConditionExpression: "#City= :City and #RestaurantID= :RestaurantID",
-    ExpressionAttributeNames: {
-        "#City": "City",
-        "#RestaurantID": "Restaurant ID"
 
-    }
-
-};
 
 function getRestaurant(queryParams, callback) {
-    var expressionValues = {
-
-        ":City": queryParams.city,
-        ":RestaurantID": parseInt(queryParams.restaurantID)
+    var params = {
+        TableName: "restaurant"
     };
-    params.ExpressionAttributeValues = expressionValues;
+    if (queryParams.city) {
+        var expressionValues = {
+
+            ":City": queryParams.city,
+            ":RestaurantID": parseInt(queryParams.restaurantID)
+        };
+        params.ExpressionAttributeValues = expressionValues;
+        params.KeyConditionExpression = "#City= :City and #RestaurantID= :RestaurantID";
+        params.ExpressionAttributeNames = {
+            "#City": "City",
+            "#RestaurantID": "Restaurant ID"
+
+        };
+
+        docClient.query(params, function(err, data) {
+            if (err) {
+                console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+                callback(err, null);
+            } else {
+                console.log("Query succeeded.");
+                callback(null, data.Items);
+
+            }
+        });
+    } else {
+        docClient.scan(params, function(err, data) {
+            if (err) {
+                console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+                callback(err, null);
+            } else {
+                console.log("Query succeeded.");
+                callback(null, data.Items);
+
+            }
+        });
+    }
 
 
-    docClient.query(params, function(err, data) {
-        if (err) {
-            console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-            callback(err, null);
-        } else {
-            console.log("Query succeeded.");
-            callback(null, data.Items);
 
-        }
-    });
+
 }
 
 exports.getRestaurant = getRestaurant;
